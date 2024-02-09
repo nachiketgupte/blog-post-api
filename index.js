@@ -39,29 +39,6 @@ let posts = [
   },
 ];
 
-// posts.forEach(post => {
-//   Posts.doc((post.id).toString()).set(post)
-//   .then(() => {
-//     console.log(post, " Successfully added!");
-//   })
-//   .catch((error) => {
-//     console.log('Error adding post ', error);
-//   })
-// });
-
-// posts.forEach(post => {
-//   Posts.add(post)
-//   .then((docRef) => {
-//     console.log('Document added with ID: ', docRef)
-//   })
-//   .catch((error) => {
-//     console.log('Error adding document ', error);
-//   })
-// });
-
-// Middleware
-
-
 //CHALLENGE 1: GET All posts
 
 app.get("/posts", (req, res) => {
