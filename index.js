@@ -1,8 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+
+// Firebase collection
+import Posts from "./firebaseconfig.js"
+
 const app = express();
 const port = 4000;
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // In-memory data store
 let posts = [
@@ -32,26 +39,58 @@ let posts = [
   },
 ];
 
-let lastId = 3;
+// posts.forEach(post => {
+//   Posts.doc((post.id).toString()).set(post)
+//   .then(() => {
+//     console.log(post, " Successfully added!");
+//   })
+//   .catch((error) => {
+//     console.log('Error adding post ', error);
+//   })
+// });
+
+// posts.forEach(post => {
+//   Posts.add(post)
+//   .then((docRef) => {
+//     console.log('Document added with ID: ', docRef)
+//   })
+//   .catch((error) => {
+//     console.log('Error adding document ', error);
+//   })
+// });
 
 // Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-//Write your code here//
 
 //CHALLENGE 1: GET All posts
 
 app.get("/posts", (req, res) => {
-  res.json(posts);
+  let result = [];
+  Posts.get()
+  .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+        result.push(doc.data());
+      });
+      res.json(result);
+  })
+  .catch((error) => {
+      console.error('Error getting documents:', error);
+  });
 })
 
 //CHALLENGE 2: GET a specific post by id
 
 app.get("/posts/:id", (req, res) => {
-  const id = req.params.id
-  const post = posts.find((post) => post.id == id);
-  res.json(post)
+  const id = req.params.id.toString();
+  Posts.doc(id).get()
+  .then((post) => {
+    res.json(post.data())
+  })
+  .catch((error) => {
+    console.log(error);
+    res.status(404);
+  })
 })
 
 //CHALLENGE 3: POST a new post
