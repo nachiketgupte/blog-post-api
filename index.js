@@ -1,6 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+
+// Firebase collection
+import Posts from "./firebaseconfig.js"
+
 const app = express();
 const port = 4000;
 
@@ -32,7 +36,15 @@ let posts = [
   },
 ];
 
-let lastId = 3;
+// posts.forEach(post => {
+//   Posts.add(post)
+//   .then((docRef) => {
+//     console.log('Document added with ID: ', docRef)
+//   })
+//   .catch((error) => {
+//     console.log('Error adding document ', error);
+//   })
+// });
 
 // Middleware
 app.use(bodyParser.json());
