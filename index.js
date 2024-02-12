@@ -73,31 +73,31 @@ app.get("/posts/:id", (req, res) => {
 //CHALLENGE 3: POST a new post
 
 app.post("/posts", (req, res) => {
-  let id
+  let id;
+  let newPost;
   Posts.get()
   .then((collections) => {
     collections.forEach((collection) => {
       id = collection.data().id
+      // console.log("ID: ",collection.data());
     })
+    // First query id, then create new post, then add post to db
+    newPost = {
+      id: id + 1,
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author,
+      date: new Date().toDateString()
+    }
+
+    Posts.doc((newPost.id).toString()).set(newPost)
+    .catch((error) => {
+      console.log('Error adding post ', error)
+    })
+
   })
   .catch((error) => {
     console.log(error);
-  })
-
-  const newPost = {
-    id: id + 1,
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author,
-    date: new Date()
-  }
-
-  Posts.add(newPost)
-  .then((docRef) => {
-    console.log(docRef);
-  })
-  .catch((error) => {
-    console.log('Error adding post ', error)
   })
   
   res.json(newPost);
